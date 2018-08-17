@@ -22,7 +22,7 @@ REDIS_URL = "redis://127.0.0.1:6379"
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
 USER_AGENT = 'Mozilla/5.0 (iPhone; CPU iPhone OS 9_1 like Mac OS X) AppleWebKit/601.1.46 (KHTML, like Gecko) Version/9.0 Mobile/13B143 Safari/601.1'
-LOG_LEVEL = 'INFO'
+LOG_LEVEL = 'WARNING'
 
 # Obey robots.txt rules
 ROBOTSTXT_OBEY = False

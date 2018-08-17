@@ -35,7 +35,7 @@ class LjSpider(RedisCrawlSpider):
     def parse_detail(self, response):
 
         item = {}
-        logger.error(response.url)
+        #logger.error(response.url)
         item['name'] = response.xpath('//h3[@class="house_desc lazyload_ulog"]/text()').extract_first()
         item['house_code'] = json.loads(response.xpath('//div[@class="content_area"]/@data-info').extract_first()).get(
             'house_code', '')
@@ -49,7 +49,7 @@ class LjSpider(RedisCrawlSpider):
         item['total_price'] = temp1[0] if temp1[0] else ""
 
         temp2 = response.xpath('//ul[@class="house_description big lightblack"]/li/text()').extract()
-        print(temp2)
+        #print(temp2)
         item['unit_price'] = temp2[0] if temp2[0] else ""
         item['orientation'] = temp2[2] if temp2[2] else ""
         item['floor'] = temp2[3] if temp2[3] else ""
