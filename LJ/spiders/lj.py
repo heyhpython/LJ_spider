@@ -10,6 +10,7 @@ import json
 import logging
 logger = logging.getLogger(__name__)
 
+
 class LjSpider(RedisCrawlSpider):
     name = 'lj'
     allowed_domains = ['lianjia.com']
@@ -39,7 +40,7 @@ class LjSpider(RedisCrawlSpider):
 
         item = {}
         logger.error(response.url)
-        item['name'] = response.xpath('//h3[@class="house_desc lazyload_ulog"]/text()').extract_first()
+        item['name'] = response.xpath('//h3[@class="house_desc lazyload_ulog"]/text()').extract_first().replace('n' or' ', '')
         item['house_code'] = json.loads(response.xpath('//div[@class="content_area"]/@data-info').extract_first() or '').get(
             'house_code', '')
         item['city'] = response.xpath('//em[@class="city"]/text()').extract_first()
@@ -53,7 +54,7 @@ class LjSpider(RedisCrawlSpider):
 
         temp2 = response.xpath('//ul[@class="house_description big lightblack"]/li/text()').extract()
         #print(temp2)
-        item['unit_price'] = temp2[0] if temp2[0] else ""
+        item['unit_price'] = temp2[0].replace(',', '') if temp2[0] else ""
         item['orientation'] = temp2[2] if temp2[2] else ""
         item['floor'] = temp2[3] if temp2[3] else ""
         item['elevator'] = 1 if "有" in temp2[5] else 0
