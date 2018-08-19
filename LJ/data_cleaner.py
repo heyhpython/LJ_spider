@@ -1,36 +1,38 @@
 from pymongo import MongoClient
-from pymongo.collection import Collection
 from contextlib import contextmanager
+import datetime
 import logging
-import json
 
 logger = logging.getLogger(__name__)
 write_order = ['city', 'name', 'community_name', 'type', 'acreage', 'orientation',
                'style', 'elevator', 'location', 'floor', 'follower', 'visitor', 'tag',
-               'total_price', 'unit_price', 'distinct', 'partitioned']
+               'total_price', 'unit_price', 'district', 'partitioned']
+
+
 @contextmanager
 def make_client(ip=None, port=None):
     try:
         client = MongoClient()
         yield client
     except Exception as e:
-        logger.error(str(e))
+        raise e
     finally:
         logger.info('client closing .....')
         client.close()
 
 
 def cleaner(db):
-    collection = db.LJ
-    with open('./data.txt', 'w') as f:
+
+    collection = db['LJ']
+    with open('./data{}.txt'.format(datetime.datetime.now()), 'w', encoding='utf-8') as f:
         for r in collection.find():
+            print(r)
             r.pop('_id')
 
-            for k, v in r.items():
-
-                f.write(v.replace(' ', '').replace('n', '').replace(',', '') if isinstance(v, str) else str(v))
-                f.write(',')
-
+            for k in write_order:
+                f.write(str(r.get(k)))
+                f.write('\t')
+            f.write('\n')
 
 
 def run():
