@@ -63,12 +63,16 @@ DOWNLOADER_MIDDLEWARES = {
 
 # Enable or disable extensions
 # See https://doc.scrapy.org/en/latest/topics/extensions.html
-# EXTENSIONS = {
-#    'scrapy.extensions.telnet.TelnetConsole': None,
-# }
+
+MYEXT_ENABLED = True  # 开启扩展
+IDLE_NUMBER = 360  # 配置空闲持续时间单位为 360个 ，一个时间单位为5s
+EXTENSIONS = {
+   'LJ.extensions.RedisSpiderSmartIdleClosedExensions': 500,
+}
 
 # Configure item pipelines
 # See https://doc.scrapy.org/en/latest/topics/item-pipeline.html
+
 ITEM_PIPELINES = {
     'LJ.pipelines.LjPipeline': 300,
 }
@@ -94,10 +98,8 @@ ITEM_PIPELINES = {
 # HTTPCACHE_IGNORE_HTTP_CODES = []
 # HTTPCACHE_STORAGE = 'scrapy.extensions.httpcache.FilesystemCacheStorage'
 
-MYEXT_ENABLED = True  # 开启扩展
-IDLE_NUMBER = 360  # 配置空闲持续时间单位为 360个 ，一个时间单位为5s
-
+#
 # 在 EXTENSIONS 配置，激活扩展
-EXTENSIONS = {
-                 'LJ.extensions.RedisSpiderSmartIdleClosedExensions': 500,
-             },
+# EXTENSIONS = {
+#                  'LJ.extensions.RedisSpiderSmartIdleClosedExensions': 500,
+#              },
