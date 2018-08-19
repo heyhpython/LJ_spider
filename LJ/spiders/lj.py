@@ -40,30 +40,28 @@ class LjSpider(RedisCrawlSpider):
 
         item = {}
         logger.error(response.url)
-        item['name'] = response.xpath('//h3[@class="house_desc lazyload_ulog"]/text()').extract_first().replace('n' or' ', '')
-        item['house_code'] = json.loads(response.xpath('//div[@class="content_area"]/@data-info').extract_first() or '').get(
-            'house_code', '')
-        item['city'] = response.xpath('//em[@class="city"]/text()').extract_first()
-        item['community_name'] = response.xpath('//a[@class="post_ulog"]/text()').extract_first()
-
-        # 售价房型面积
         temp1 = response.xpath('//h3[@class="similar_data"]//p[@class="red big"]//text()').extract()
+        temp2 = response.xpath('//ul[@class="house_description big lightblack"]/li/text()').extract()
+        temp3 = response.xpath('//div[@class="data flexbox"]/div/strong/text()').extract()
+        temp4 = response.xpath('//p[@class="marker_title"]/text()').extract_first().split('，')
+        logger.error(response.url)
+
+        item['city'] = response.xpath('//em[@class="city"]/text()').extract_first()
+        item['name'] = response.xpath('//h3[@class="house_desc lazyload_ulog"]/text()').extract_first().replace('n', '').strip()
+        item['community_name'] = response.xpath('//a[@class="post_ulog"]/text()').extract_first()
         item['type'] = temp1[2] if temp1[2] else ""
         item['acreage'] = temp1[3] if temp1[3] else ""
-        item['total_price'] = temp1[0] if temp1[0] else ""
-
-        temp2 = response.xpath('//ul[@class="house_description big lightblack"]/li/text()').extract()
-        #print(temp2)
-        item['unit_price'] = temp2[0].replace(',', '') if temp2[0] else ""
         item['orientation'] = temp2[2] if temp2[2] else ""
-        item['floor'] = temp2[3] if temp2[3] else ""
-        item['elevator'] = 1 if "有" in temp2[5] else 0
         item['style'] = temp2[6] if temp2[6] else ""
-        item['create_at'] = temp2[1] if temp2[1] else ""
-
-        item['distinct'] = response.xpath('//p[@class="marker_title"]/text()').extract_first()
-
-        temp3 = response.xpath('//div[@class="data flexbox"]/div/strong/text()').extract()
-        item['visitor'] = temp3[1] if temp3[1] else 0
+        item['elevator'] = 1 if "有" in temp2[5] else 0
+        item['location'] = temp4[1]
+        item['floor'] = temp2[3] if temp2[3] else ""
         item['follower'] = temp3[2] if temp3[2] else 0
+        item['visitor'] = temp3[1] if temp3[1] else 0
+        item['create_at'] = temp2[1].replace('.', '-') if temp2[1] else ""
+        item['tag'] = ''
+        item['total_price'] = temp1[0].replace('万', '') if temp1[0] else ""
+        item['unit_price'] = temp2[0].replace(',', '').split('元')[0] if temp2[0] else ""
+        item['district'] = temp4[0]
+
         yield deepcopy(item)
