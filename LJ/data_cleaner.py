@@ -5,8 +5,9 @@ import logging
 import json
 
 logger = logging.getLogger(__name__)
-
-
+write_order = ['city', 'name', 'community_name', 'type', 'acreage', 'orientation',
+               'style', 'elevator', 'location', 'floor', 'follower', 'visitor', 'tag',
+               'total_price', 'unit_price', 'distinct', 'partitioned']
 @contextmanager
 def make_client(ip=None, port=None):
     try:
@@ -21,33 +22,22 @@ def make_client(ip=None, port=None):
 
 def cleaner(db):
     collection = db.LJ
-    count = collection.find().count()
-    l = 10000
-    s = 0
-    while s <= count:
-        with open('./data{}.csv'.format(s//10000), 'w') as f:
-            i = 0
-            for r in collection.find().skip(s).limit(l):
-                r.pop('_id')
-                if i==0:
-                    for k in r.keys():
-                        f.write(k)
-                        f.write(',')
-                    f.write('\n')
-                    i += 1
+    with open('./data.txt', 'w') as f:
+        for r in collection.find():
+            r.pop('_id')
 
-                for k,v in r.items():
+            for k, v in r.items():
 
-                    f.write(v.replace(' ', '').replace('n','').replace(',', '') if isinstance(v, str) else str(v))
-                    f.write(',')
-                f.write('\n')
-        s += l
+                f.write(v.replace(' ', '').replace('n', '').replace(',', '') if isinstance(v, str) else str(v))
+                f.write(',')
+            f.write('\n')
 
 
 def run():
     with make_client() as client:
         db = client.LJ
         cleaner(db)
+
 
 if __name__ == "__main__":
     run()

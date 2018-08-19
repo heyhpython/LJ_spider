@@ -19,7 +19,7 @@ class LjItem(scrapy.Item):
     orientation = scrapy.Field()
     style = scrapy.Field()
     elevator = scrapy.Field()
-    distinct = scrapy.Field()
+    district = scrapy.Field()
     floor = scrapy.Field()
     follower = scrapy.Field()
     visitor = scrapy.Field()
