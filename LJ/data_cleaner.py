@@ -24,24 +24,22 @@ def cleaner(db):
     count = collection.find().count()
     l = 10000
     s = 0
-    while s <= count:
-        with open('./data{}.csv'.format(s//10000), 'w') as f:
-            i = 0
-            for r in collection.find().skip(s).limit(l):
-                r.pop('_id')
-                if i==0:
-                    for k in r.keys():
-                        f.write(k)
-                        f.write(',')
-                    f.write('\n')
-                    i += 1
-
-                for k,v in r.items():
-
-                    f.write(v.replace(' ', '').replace('n','').replace(',', '') if isinstance(v, str) else str(v))
-                    f.write(',')
+    with open('./data.txt', 'w') as f:
+        i = 0
+        for r in collection.find():
+            r.pop('_id')
+            if i==0:
+                for k in r.keys():
+                    f.write(k)
+                    f.write('\t')
                 f.write('\n')
-        s += l
+                i += 1
+
+            for k,v in r.items():
+
+                f.write(v.replace(' ', '').replace('n','').replace(',', '') if isinstance(v, str) else str(v))
+                f.write('\t')
+            f.write('\n')
 
 
 def run():
