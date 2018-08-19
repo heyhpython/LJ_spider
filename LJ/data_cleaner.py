@@ -30,7 +30,7 @@ def cleaner(db):
 
                 f.write(v.replace(' ', '').replace('n', '').replace(',', '') if isinstance(v, str) else str(v))
                 f.write(',')
-            f.write('\n')
+
 
 
 def run():
