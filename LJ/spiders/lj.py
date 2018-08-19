@@ -20,6 +20,9 @@ class LjSpider(RedisCrawlSpider):
         # 找到所有的城市链接
         # Rule(LinkExtractor(restrict_xpaths=("//div[@class='block city_block']/a",)), follow=False),
 
+        # 找到所有的区
+        Rule(LinkExtractor(restrict_xpaths=('//div[@class="area_list"]//ul[@class="level2 active"]//li/a',)), follow=True),
+
         # 找到二手房
         # Rule(LinkExtractor(restrict_xpaths=("//h2[@title='二手房']//a",)), follow=False),
 
@@ -35,9 +38,9 @@ class LjSpider(RedisCrawlSpider):
     def parse_detail(self, response):
 
         item = {}
-        #logger.error(response.url)
+        logger.error(response.url)
         item['name'] = response.xpath('//h3[@class="house_desc lazyload_ulog"]/text()').extract_first()
-        item['house_code'] = json.loads(response.xpath('//div[@class="content_area"]/@data-info').extract_first()).get(
+        item['house_code'] = json.loads(response.xpath('//div[@class="content_area"]/@data-info').extract_first() or '').get(
             'house_code', '')
         item['city'] = response.xpath('//em[@class="city"]/text()').extract_first()
         item['community_name'] = response.xpath('//a[@class="post_ulog"]/text()').extract_first()

@@ -7,6 +7,7 @@
 from pymongo import MongoClient
 import json
 
+
 class LjPipeline(object):
     def open_spider(self, spider):
         self.client = MongoClient()
