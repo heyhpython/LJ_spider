@@ -28,7 +28,7 @@ class LjSpider(RedisCrawlSpider):
         # Rule(LinkExtractor(restrict_xpaths=("//h2[@title='二手房']//a",)), follow=False),
 
         # 找到房源url
-        Rule(LinkExtractor(restrict_xpaths=("///li[@class='pictext']/a",)), follow=True,
+        Rule(LinkExtractor(restrict_xpaths=("//li[@class='pictext']/a",)), follow=True,
              callback="parse_detail"),
 
         # 翻页
@@ -65,3 +65,4 @@ class LjSpider(RedisCrawlSpider):
         item['district'] = temp4[0]
 
         yield deepcopy(item)
+
